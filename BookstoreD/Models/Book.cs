@@ -14,11 +14,6 @@ namespace BookstoreD
     decimal price;
     int inStock;
 
-    //public string Title { get => title; set => title = value; }
-    //public string Author { get => author; set => author = value; }
-    //public decimal Price { get => price; set => price = value; }
-    //public int InStock { get => inStock; set => inStock = value; }
-
     //Properties
     public string Title
     {
