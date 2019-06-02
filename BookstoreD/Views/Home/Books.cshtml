@@ -1,0 +1,42 @@
+﻿@model IEnumerable<IBook>
+
+@{
+    ViewBag.Title = "Books";
+}
+<h2>@ViewBag.Title.</h2>
+<p>@ViewBag.Message</p>
+
+<style>
+    th, td {
+        padding: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Author)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+     <tr>
+         <td>
+             @Html.DisplayFor(modelItem => item.Title)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.Author)
+         </td>
+         <td>
+             @Html.DisplayFor(modelItem => item.Price)
+         </td>
+     </tr>
+    }
+</table>

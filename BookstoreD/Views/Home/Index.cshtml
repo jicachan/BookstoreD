@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Köp en bok!";
+}
+<h1>Sök din bok här</h1>
+@using (Html.BeginForm("BooksAsync", "Home", FormMethod.Post, new { id = "searchForm" }))
+{
+    <input type="text" name="searchString" placeholder="Skriv in titel eller författare" />
+    <input type="submit" value="Sök" />
+}
+
+@if (ViewBag.Books != null)
+{
+<table>
+    <tr>
+        <th>
+            Titel
+        </th>
+        <th>
+            Författare
+        </th>
+        <th>
+            Pris
+        </th>
+    </tr>
+
+    @foreach (IBook item in ViewBag.Books)
+    {
+        <tr>
+            <td>
+                <strong>@item.Title</strong>
+            </td>
+            <td>
+                <em>@item.Author</em>
+            </td>
+            <td>
+                <span style="font-size: 1.2em;">@item.Price.ToString() SEK</span>
+            </td>
+        </tr>
+
+    }
+</table>
+}
+
+
+
