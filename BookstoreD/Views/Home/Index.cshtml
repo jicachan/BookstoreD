@@ -1,6 +1,13 @@
 ﻿@{
     ViewBag.Title = "Köp en bok!";
 }
+
+<style>
+    th, td {
+        padding: 15px 25px;
+    }
+</style>
+
 <h1>Sök din bok här</h1>
 @using (Html.BeginForm("BooksAsync", "Home", FormMethod.Post, new { id = "searchForm" }))
 {
@@ -10,35 +17,55 @@
 
 @if (ViewBag.Books != null)
 {
-<table>
-    <tr>
-        <th>
-            Titel
-        </th>
-        <th>
-            Författare
-        </th>
-        <th>
-            Pris
-        </th>
-    </tr>
-
-    @foreach (IBook item in ViewBag.Books)
+    using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "addToCartForm" }))
     {
-        <tr>
-            <td>
-                <strong>@item.Title</strong>
-            </td>
-            <td>
-                <em>@item.Author</em>
-            </td>
-            <td>
-                <span style="font-size: 1.2em;">@item.Price.ToString() SEK</span>
-            </td>
-        </tr>
+        <table>
+            <tr>
+                <th>
+                    Titel
+                </th>
+                <th>
+                    Författare
+                </th>
+                <th>
+                    Pris
+                </th>
+            </tr>
 
+            @foreach (IBook item in ViewBag.Books)
+            {
+                <tr>
+                    <td>
+                        <em>@item.Title</em>
+                    </td>
+                    <td>
+                        @item.Author
+                    </td>
+                    <td>
+                        @item.Price.ToString() SEK
+                    </td>
+                    <td>
+                        <input type="submit" value="Lägg i kundvagn" />
+                    </td>
+                    <td>
+                        <label name="selectedBookTitle"></label>
+                    </td>
+                </tr>
+            }
+        </table>
+
+        if (ViewBag.Cart != null)
+        {
+            foreach (Book item in ViewBag.Cart)
+            {
+                <label>Titel: @item.Title</label>
+            }
+        }
     }
-</table>
+
+
+
+    <p>@(System.Web.HttpContext.Current.Session["sessionStorage"] as String)</p>
 }
 
 

@@ -9,18 +9,24 @@ namespace BookstoreD
   public class ShoppingCart 
   {
     // Variables
-    private List<Book> shopcart;
+    List<Book> shopcart = new List<Book>();
+    decimal totalSum = 0;
 
     // Properties
-    public List<Book> Shopcart { get => shopcart; set => shopcart = value; }  
+    public List<Book> Shopcart { get => shopcart; set => shopcart = value; }
+    public decimal TotalSum { get => totalSum; set => totalSum = value; }
 
-
+    
 
     // Method: Add a book to cart, without checking instock 
-    public void AddBookToCart(Book book)
-    {      
-      shopcart.Add(book);     
+    public List<Book> AddBookToCart(Book book)
+    {
+      Book b = new Book("Hej", "Tom", 24, 6);
+      shopcart.Add(b);
+      shopcart.Add(book);
+      return shopcart;
     }
+
     
     // Method: Remove a book from cart
     public void RemoveBookFromCartByTitle (string removeItem)
@@ -35,21 +41,19 @@ namespace BookstoreD
       }      
     }
 
-    // Method: Show total sum of order
-    public decimal GetTotalSumOfOrder(List<Book> list)
-    {
-      // Reset totalSum
-      decimal totalSumOfOrder = 0;
 
+    // Method: Show total sum of order
+    public decimal GetTotalSum(List<Book> list)
+    {      
+      TotalSum = 0; // Reset totalsum
       if (list != null && list.Any())
       {
         foreach (var b in list)
         {
-          totalSumOfOrder += b.Price;
+          TotalSum += b.Price;
         }
       }      
-      return totalSumOfOrder;
+      return TotalSum;
     }
-
   }
 }

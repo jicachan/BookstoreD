@@ -14,11 +14,22 @@ namespace BookstoreD
     decimal price;
     int inStock;
 
-    //Properties
+    // Properties
     public string Title
     {
       get { return title; }
       set { title = value; }
+    }
+
+    // Constructor
+    public Book() { }
+
+    public Book(string title, string author, decimal price, int inStock)
+    {
+      Title = title;
+      Author = author;
+      Price = price;
+      InStock = inStock;
     }
 
     public string Author

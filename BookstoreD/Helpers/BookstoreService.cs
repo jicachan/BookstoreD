@@ -12,41 +12,18 @@ namespace BookstoreD
 {
   class BookstoreService : IBookstoreService
   {
-    // Method: Get booklist from json (url).     
-    public BookCollection GetJsonDataFromUrl(string url)
-    {
-      BookCollection books = null;
-      using (WebClient wc = new WebClient() { Encoding = Encoding.UTF8 }) // Encoding.UTF8 to handle the Swedish characters
-      {
-        String jsondata = string.Empty;
-        try
-        {          
-          jsondata = wc.DownloadString(url);
-        }
-        catch (Exception)
-        {
-          throw new NullReferenceException();
-        }		
-        if (!string.IsNullOrEmpty(jsondata))
-        {
-          // Convert jsondata to a serie of objects
-          books = JsonConvert.DeserializeObject<BookCollection>(jsondata);          
-        }
-      }
-      return books;
-    }
-
+    // Method: Filter books by search string
     public IEnumerable<IBook> GetBookByTitleOrAuthor(string searchString, BookCollection bookstore)
     {
       IEnumerable<IBook> searchResults = null;          
       if (!String.IsNullOrEmpty(searchString))
       {
-        searchResults = bookstore.Books.Where(s => (s.Title.Contains(searchString)) || (s.Author.Contains(searchString))).ToList();
+        searchResults = bookstore.Books.Where(s => (s.Title.ToLower().Contains(searchString.ToLower())) || (s.Author.ToLower().Contains(searchString.ToLower()))).ToList();
       }
       return searchResults;
     }
 
-    // Method: Search for book by title or author, return list of Book
+    // Method: Get booklist from json (url) and Search for book by title or author, return list of Book
     public async Task<IEnumerable<IBook>> GetBooksAsync(string searchString)
     {
       var uri = "https://raw.githubusercontent.com/contribe/contribe/dev/arbetsprov-net/books.json";
@@ -67,6 +44,8 @@ namespace BookstoreD
         {
           searchResults = GetBookByTitleOrAuthor(searchString, books);
         }
+        string session = JsonConvert.SerializeObject(searchResults);
+        System.Web.HttpContext.Current.Session["sessionStorage"] = session;
         return searchResults;
       }
 

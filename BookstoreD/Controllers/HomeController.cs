@@ -11,16 +11,29 @@ namespace BookstoreD.Controllers
   {
     public ActionResult Index()
     {
-      ViewBag.SyncOrAsync = "Synchronous";
       return View();
     }
 
     public ActionResult Cart()
     {
-      ViewBag.Message = "Your Shopping Cart.";
+      ViewBag.Message = "Kundvagnen";
       return View();
     }
 
+    public ActionResult Order()
+    {
+      ViewBag.Title = "Din orderbekräftelse";
+      return View();
+    }
+
+    public ActionResult AddToCart()
+    {
+      ShoppingCart sc = new ShoppingCart();
+
+      string chosenBook = Request.Form["selectedBookTitle"];
+      ViewBag.BookTitle = chosenBook;
+      return View("Cart");
+    }
 
     public async Task<ActionResult> BooksAsync()
     {      
@@ -28,6 +41,7 @@ namespace BookstoreD.Controllers
       ViewBag.Books = await bookstoreService.GetBooksAsync(Request.Form["searchString"]);
       return View("Index");
     }
+
 
   }
 }
