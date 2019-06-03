@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,7 @@ namespace BookstoreD.Controllers
     }
 
     public ActionResult Cart()
-    {
-      ViewBag.Message = "Kundvagnen";
+    {      
       return View();
     }
 
@@ -25,14 +25,21 @@ namespace BookstoreD.Controllers
       ViewBag.Title = "Din orderbekräftelse";
       return View();
     }
-
+    
     public ActionResult AddToCart()
     {
-      ShoppingCart sc = new ShoppingCart();
+      ShoppingCart scart = new ShoppingCart();
+      Book book = new Book(Request.Form["title"], Request.Form["author"], Convert.ToDecimal(Request.Form["price"]), Convert.ToInt32(Request.Form["instock"]));
 
-      string chosenBook = Request.Form["selectedBookTitle"];
-      ViewBag.BookTitle = chosenBook;
-      return View("Cart");
+      ViewBag.AddedBookList = scart.AddBookToCart(book);
+      //Session["InCart"] = sc.Shopcart;
+            
+      // Make book info into json-format
+      string session = JsonConvert.SerializeObject(scart.Shopcart);
+      System.Web.HttpContext.Current.Session["booksAddedToCart"] = session;
+            
+      ViewBag.Confirm = book.Title + " has been added to shopping cart.";      
+      return View("Index");
     }
 
     public async Task<ActionResult> BooksAsync()
@@ -41,7 +48,5 @@ namespace BookstoreD.Controllers
       ViewBag.Books = await bookstoreService.GetBooksAsync(Request.Form["searchString"]);
       return View("Index");
     }
-
-
   }
 }

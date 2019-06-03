@@ -32,6 +32,13 @@ namespace BookstoreD
       InStock = inStock;
     }
 
+    public Book(string title, string author, decimal price)
+    {
+      Title = title;
+      Author = author;
+      Price = price;
+    }
+
     public string Author
     {
       get { return author; }

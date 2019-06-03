@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,14 +21,14 @@ namespace BookstoreD
 
     // Method: Add a book to cart, without checking instock 
     public List<Book> AddBookToCart(Book book)
-    {
-      Book b = new Book("Hej", "Tom", 24, 6);
-      shopcart.Add(b);
+    {      
       shopcart.Add(book);
       return shopcart;
     }
 
-    
+   
+
+
     // Method: Remove a book from cart
     public void RemoveBookFromCartByTitle (string removeItem)
     {

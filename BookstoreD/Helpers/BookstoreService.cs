@@ -45,7 +45,7 @@ namespace BookstoreD
           searchResults = GetBookByTitleOrAuthor(searchString, books);
         }
         string session = JsonConvert.SerializeObject(searchResults);
-        System.Web.HttpContext.Current.Session["sessionStorage"] = session;
+        System.Web.HttpContext.Current.Session["searchResultsInSession"] = session;
         return searchResults;
       }
 

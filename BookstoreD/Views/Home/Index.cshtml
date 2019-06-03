@@ -17,56 +17,63 @@
 
 @if (ViewBag.Books != null)
 {
-    using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "addToCartForm" }))
-    {
-        <table>
-            <tr>
-                <th>
-                    Titel
-                </th>
-                <th>
-                    Författare
-                </th>
-                <th>
-                    Pris
-                </th>
-            </tr>
+    <table>
+        <tr>
+            <th>
+                Titel
+            </th>
+            <th>
+                Författare
+            </th>
+            <th>
+                Pris
+            </th>
+        </tr>
 
-            @foreach (IBook item in ViewBag.Books)
-            {
-                <tr>
-                    <td>
-                        <em>@item.Title</em>
-                    </td>
-                    <td>
-                        @item.Author
-                    </td>
-                    <td>
-                        @item.Price.ToString() SEK
-                    </td>
-                    <td>
-                        <input type="submit" value="Lägg i kundvagn" />
-                    </td>
-                    <td>
-                        <label name="selectedBookTitle"></label>
-                    </td>
-                </tr>
-            }
-        </table>
-
-        if (ViewBag.Cart != null)
+        @foreach (Book item in ViewBag.Books)
         {
-            foreach (Book item in ViewBag.Cart)
-            {
-                <label>Titel: @item.Title</label>
-            }
+            <tr>
+                <td>
+                    <em>@item.Title</em>
+                </td>
+                <td>
+                    @item.Author
+                </td>
+                <td>
+                    @item.Price.ToString() SEK
+                </td>
+                <td>
+                    @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { id = "addToCartForm" }))
+                    {
+                        <input type="hidden" name="title" value="@item.Title" />
+                        <input type="hidden" name="author" value="@item.Author" />
+                        <input type="hidden" name="price" value="@item.Price" />
+                        <input type="hidden" name="instock" value="@item.InStock" />
+
+                        <input type="submit" value="Lägg i kundvagn" />
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+    if (ViewBag.AddedBookList != null)
+    {
+        foreach (Book item in ViewBag.AddedBookList)
+        {
+            <label><strong>Titel: </strong>@item.Title</label>
         }
     }
-
-
-
-    <p>@(System.Web.HttpContext.Current.Session["sessionStorage"] as String)</p>
 }
+
+<p><strong>@ViewBag.Confirm</strong></p>
+
+<p>@(System.Web.HttpContext.Current.Session["searchResultsInSession"] as String)</p>
+
+<div hidden="hidden">Titel har lagts till i kundkorg: 
+    @(System.Web.HttpContext.Current.Session["booksAddedToCart"] as String)</div>
+
+
 
 
 

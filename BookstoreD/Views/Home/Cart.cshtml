@@ -3,4 +3,12 @@
 }
 <h2>@ViewBag.Title.</h2>
 
-<p>Book title: @ViewBag.BookTitle</p>
+@ViewBag.Confirm
+
+@if(ViewBag.AddedBookList != null)
+{
+    foreach (Book item in ViewBag.AddedBookList)
+    {
+        <p>Boktitel: @item.Title</p>
+    }
+}
