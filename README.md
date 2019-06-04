@@ -7,3 +7,4 @@ BookstoreService som implementerar interfacet IBookstoreService agerar som en hj
 
 Eftersom det är en liten applikation finns bara en Controller-klass där de olika metoderna för View finns.  
 
+Data skickas mellan kontroller och vyer (server-sidan och klient-sidan) genom session, genom omvandling av objekt-listor (List<Book>) till json-format. 
