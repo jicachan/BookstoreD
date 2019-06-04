@@ -10,9 +10,18 @@
     th, td {
         padding: 15px 25px;
     }
+    .total {
+        margin-top: 50px;
+        margin-left: 20px;
+    }
+    .order-btn {
+        margin: 40px 20px;        
+        width: 536px;
+        font-size: 25px;
+    }
 </style>
 
-<h2>@ViewBag.Message</h2>
+<h1>@ViewBag.Message</h1>
 
 
 @if (System.Web.HttpContext.Current.Session["booksAddedToCart"] != null)
@@ -48,10 +57,16 @@
                     }
                 </td>
             </tr>
+            
         }
     }
-
-
 </table>
+<div class="total"><strong>Totalt: </strong>@ViewBag.TotalSum SEK </div>
 
+  using(Html.BeginForm("Order", "Home", FormMethod.Post, new { id = "orderForm" }))
+  {
+    <input type="submit" value="Gör en beställning" class="order-btn"/>
+  }
 }
+
+

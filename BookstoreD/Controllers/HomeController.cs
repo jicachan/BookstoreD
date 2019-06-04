@@ -25,15 +25,25 @@ namespace BookstoreD.Controllers
       }
       else
       {
+        // panel synlig
         ViewBag.Message = "Din kundvagn innehåller ";
         ViewBag.BooksInCart = cart.GetCartItemsFromJsonString(System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString());
+        ViewBag.TotalSum = cart.GetTotalSum(cart.Shopcart);
       }
       return View();
     }
 
     public ActionResult Order()
     {
-      ViewBag.Title = "Din orderbekräftelse";
+      if (System.Web.HttpContext.Current.Session["booksAddedToCart"] == null)
+      {
+        ViewBag.Title = "Du har ingen beställning än.";
+      }
+      else
+      {
+        
+      }
+        
       return View();
     }
 
@@ -70,7 +80,9 @@ namespace BookstoreD.Controllers
         // Store data back into json-string to session        
         System.Web.HttpContext.Current.Session["booksAddedToCart"] = tempCart.StoreCartItemsToJsonSession(tempCart.Shopcart);
       }            
-      ViewBag.Confirm = book.Title + " har lagts till i kundvagnen.";      
+
+      // Send data to View
+      ViewBag.Confirm = book.Title + " har lagts till i kundvagnen.";     
       return View("Index");
     }
 
@@ -86,7 +98,11 @@ namespace BookstoreD.Controllers
 
       // Store data back into json-string
       System.Web.HttpContext.Current.Session["booksAddedToCart"] = tempCart.StoreCartItemsToJsonSession(tempCart.Shopcart);
+
+      // Send data to View
+      ViewBag.Message = "Din kundvagn innehåller ";
       ViewBag.BooksInCart = tempCart.GetCartItemsFromJsonString(System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString());
+      ViewBag.TotalSum = tempCart.GetTotalSum(tempCart.Shopcart);
       return View("Cart");
     }   
   }
