@@ -31,8 +31,8 @@ namespace BookstoreD
       {
         var response = await httpClient.GetAsync(uri);
         var jsonData = await response.Content.ReadAsStringAsync();
-        
-        BookCollection books = null;
+
+        BookCollection books = new BookCollection();
         
         if (!string.IsNullOrEmpty(jsonData))
         {

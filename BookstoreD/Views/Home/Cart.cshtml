@@ -1,14 +1,57 @@
 ﻿@{
     ViewBag.Title = "Kundvagn";
 }
-<h2>@ViewBag.Title.</h2>
 
-@ViewBag.Confirm
-
-@if(ViewBag.AddedBookList != null)
-{
-    foreach (Book item in ViewBag.AddedBookList)
-    {
-        <p>Boktitel: @item.Title</p>
+<style>
+    table {
+        margin-top: 50px;
     }
+
+    th, td {
+        padding: 15px 25px;
+    }
+</style>
+
+<h2>@ViewBag.Message</h2>
+
+
+@if (System.Web.HttpContext.Current.Session["booksAddedToCart"] != null)
+{
+<table>
+    <tr>
+        <th>Titel</th>
+        <th>Författare</th>
+        <th>Pris</th>
+    </tr>
+
+    @if (ViewBag.BooksInCart == null)
+    {
+        <p>BooksInCart är null.</p>
+    }
+    else
+    {
+        foreach (Book item in ViewBag.BooksInCart)
+        {
+            <tr>
+                <td><em>@item.Title</em></td>
+                <td>@item.Author</td>
+                <td>@item.Price.ToString() SEK</td>
+                <td>
+                    @using (Html.BeginForm("RemoveFromCart", "Home", FormMethod.Post, new { id = "cartForm" }))
+                    {
+                        <input type="hidden" name="title" value="@item.Title" />
+                        <input type="hidden" name="author" value="@item.Author" />
+                        <input type="hidden" name="price" value="@item.Price" />
+                        <input type="hidden" name="instock" value="@item.InStock" />
+
+                        <input type="submit" value="x" />
+                    }
+                </td>
+            </tr>
+        }
+    }
+
+
+</table>
+
 }

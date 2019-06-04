@@ -3,6 +3,9 @@
 }
 
 <style>
+    table {
+        margin-top: 50px;
+    }
     th, td {
         padding: 15px 25px;
     }
@@ -50,12 +53,13 @@
                         <input type="hidden" name="price" value="@item.Price" />
                         <input type="hidden" name="instock" value="@item.InStock" />
 
-                        <input type="submit" value="Lägg i kundvagn" />
+                        <input type="submit" value="Lägg i kundvagn" />                        
                     }
                 </td>
             </tr>
         }
     </table>
+    <br />
 
     if (ViewBag.AddedBookList != null)
     {
@@ -66,11 +70,11 @@
     }
 }
 
+<br />
 <p><strong>@ViewBag.Confirm</strong></p>
+@*<p>@(System.Web.HttpContext.Current.Session["searchResultsInSession"] as String)</p>*@
 
-<p>@(System.Web.HttpContext.Current.Session["searchResultsInSession"] as String)</p>
-
-<div hidden="hidden">Titel har lagts till i kundkorg: 
+<div>Tillagt i kundvagn: 
     @(System.Web.HttpContext.Current.Session["booksAddedToCart"] as String)</div>
 
 

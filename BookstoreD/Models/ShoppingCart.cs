@@ -17,7 +17,20 @@ namespace BookstoreD
     public List<Book> Shopcart { get => shopcart; set => shopcart = value; }
     public decimal TotalSum { get => totalSum; set => totalSum = value; }
 
-    
+
+    // Method
+    public List<Book> GetCartItemsFromJsonString(string session)
+    {
+      if(session == null || session == string.Empty)
+      {
+        return shopcart;
+      }
+      else
+      {
+        List<Book> books = JsonConvert.DeserializeObject<List<Book>>(session);
+        return shopcart = books;
+      }     
+    }
 
     // Method: Add a book to cart, without checking instock 
     public List<Book> AddBookToCart(Book book)
@@ -26,8 +39,11 @@ namespace BookstoreD
       return shopcart;
     }
 
-   
-
+    // Method: Store updated cartItem to json
+    public string StoreCartItemsToJsonSession(List<Book> cart)
+    {
+      return JsonConvert.SerializeObject(cart);     
+    }
 
     // Method: Remove a book from cart
     public void RemoveBookFromCartByTitle (string removeItem)
@@ -46,15 +62,15 @@ namespace BookstoreD
     // Method: Show total sum of order
     public decimal GetTotalSum(List<Book> list)
     {      
-      TotalSum = 0; // Reset totalsum
+      totalSum = 0; // Reset totalsum
       if (list != null && list.Any())
       {
         foreach (var b in list)
         {
-          TotalSum += b.Price;
+          totalSum += b.Price;
         }
       }      
-      return TotalSum;
+      return totalSum;
     }
   }
 }
