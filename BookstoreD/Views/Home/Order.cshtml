@@ -1,6 +1,75 @@
-﻿
-<h1>@ViewBag.Title</h1>
+﻿<style>
+    table {
+        margin-top: 10px;
+    }
 
+    th, td {
+        padding: 15px 25px;
+    }
+
+    .total {
+        margin-top: 50px;
+        margin-left: 20px;
+    }
+
+    .order-btn {
+        margin: 40px 20px;
+        width: 536px;
+        font-size: 25px;
+    }
+</style>
+
+<h1>@ViewBag.Title</h1>
+<br />
+
+@if (System.Web.HttpContext.Current.Session["booksAddedToCart"] != null)
+{
+    if (ViewBag.Orderlist != null)
+    {
+        <h3>@ViewBag.OrderMessage</h3>
+        <table>
+            <tr>
+                <th>Titel</th>
+                <th>Författare</th>
+                <th>Pris</th>
+            </tr>
+
+            @foreach (Book item in ViewBag.Orderlist)
+            {
+                <tr>
+                    <td><em>@item.Title</em></td>
+                    <td>@item.Author</td>
+                    <td>@item.Price.ToString() SEK</td>
+                </tr>
+            }
+        </table>        
+    }
+
+    if (ViewBag.Backorderlist != null)
+    {
+        <h3>@ViewBag.BackorderMessage</h3>
+        <table>
+            <tr>
+                <th>Titel</th>
+                <th>Författare</th>
+                <th>Pris</th>
+            </tr>
+
+            @foreach (Book item in ViewBag.Backorderlist)
+            {
+                <tr>
+                    <td><em>@item.Title</em></td>
+                    <td>@item.Author</td>
+                    <td>
+                        <input type="submit" value="Bevaka" />
+                    </td>
+                </tr>
+            }
+        </table><br />
+    }
+}
+
+<div class="total"><strong>Summa totalt att betala: </strong>@ViewBag.TotalSum SEK </div>
 
 
 

@@ -26,6 +26,10 @@
 
 @if (System.Web.HttpContext.Current.Session["booksAddedToCart"] != null)
 {
+  if (System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString() != "[]")
+  {
+
+
 <table>
     <tr>
         <th>Titel</th>
@@ -35,7 +39,7 @@
 
     @if (ViewBag.BooksInCart == null)
     {
-        <p>BooksInCart är null.</p>
+        <tr>BooksInCart är null.</tr>
     }
     else
     {
@@ -57,15 +61,16 @@
                     }
                 </td>
             </tr>
-            
+
         }
     }
 </table>
 <div class="total"><strong>Totalt: </strong>@ViewBag.TotalSum SEK </div>
 
-  using(Html.BeginForm("Order", "Home", FormMethod.Post, new { id = "orderForm" }))
-  {
+      using (Html.BeginForm("MakeAnOrder", "Home", FormMethod.Post, new { id = "orderForm" }))
+      {
     <input type="submit" value="Gör en beställning" class="order-btn"/>
+      }
   }
 }
 

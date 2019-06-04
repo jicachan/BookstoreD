@@ -15,6 +15,14 @@ namespace BookstoreD.Controllers
       return View();
     }
 
+    // Get books from bookstore and search string
+    public async Task<ActionResult> BooksAsync()
+    {
+      var bookstoreService = new BookstoreService();
+      ViewBag.Books = await bookstoreService.GetBooksAsync(Request.Form["searchString"]);
+      return View("Index");
+    }
+
     public ActionResult Cart()
     {
       ShoppingCart cart = new ShoppingCart();
@@ -24,8 +32,7 @@ namespace BookstoreD.Controllers
         ViewBag.Message = "Din kundvagn är tom.";
       }
       else
-      {
-        // panel synlig
+      {        
         ViewBag.Message = "Din kundvagn innehåller ";
         ViewBag.BooksInCart = cart.GetCartItemsFromJsonString(System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString());
         ViewBag.TotalSum = cart.GetTotalSum(cart.Shopcart);
@@ -33,38 +40,16 @@ namespace BookstoreD.Controllers
       return View();
     }
 
-    public ActionResult Order()
-    {
-      if (System.Web.HttpContext.Current.Session["booksAddedToCart"] == null)
-      {
-        ViewBag.Title = "Du har ingen beställning än.";
-      }
-      else
-      {
-        
-      }
-        
-      return View();
-    }
-
-    // Get books from bookstore and search string
-    public async Task<ActionResult> BooksAsync()
-    {
-      var bookstoreService = new BookstoreService();
-      ViewBag.Books = await bookstoreService.GetBooksAsync(Request.Form["searchString"]);
-      return View("Index");
-    }
-
     // Add Book book to shopcart and to cartJSON
     public ActionResult AddToCart()
     {
-      ShoppingCart tempCart = new ShoppingCart();      
+      ShoppingCart tempCart = new ShoppingCart();
       Book book = new Book(Request.Form["title"], Request.Form["author"], Convert.ToDecimal(Request.Form["price"]), Convert.ToInt32(Request.Form["instock"]));
-      
+
       // Add book to cart
-      ViewBag.AddedBookList = tempCart.AddBookToCart(book);      
-       
-      if(System.Web.HttpContext.Current.Session["booksAddedToCart"] == null )
+      ViewBag.AddedBookList = tempCart.AddBookToCart(book);
+
+      if (System.Web.HttpContext.Current.Session["booksAddedToCart"] == null)
       {
         // Empty. Store item data into json-string        
         System.Web.HttpContext.Current.Session["booksAddedToCart"] = tempCart.StoreCartItemsToJsonSession(tempCart.Shopcart);
@@ -79,10 +64,10 @@ namespace BookstoreD.Controllers
 
         // Store data back into json-string to session        
         System.Web.HttpContext.Current.Session["booksAddedToCart"] = tempCart.StoreCartItemsToJsonSession(tempCart.Shopcart);
-      }            
+      }
 
       // Send data to View
-      ViewBag.Confirm = book.Title + " har lagts till i kundvagnen.";     
+      ViewBag.Confirm = book.Title + " har lagts till i kundvagnen.";
       return View("Index");
     }
 
@@ -104,6 +89,57 @@ namespace BookstoreD.Controllers
       ViewBag.BooksInCart = tempCart.GetCartItemsFromJsonString(System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString());
       ViewBag.TotalSum = tempCart.GetTotalSum(tempCart.Shopcart);
       return View("Cart");
-    }   
+    }
+
+    public ActionResult Order()
+    {
+      ShoppingCart cart = new ShoppingCart();
+      Order order = new Order();
+
+      if (System.Web.HttpContext.Current.Session["booksAddedToCart"] == null)
+      {
+        ViewBag.Title = "Du har ingen beställning än.";        
+      }
+
+      if (System.Web.HttpContext.Current.Session["booksInOrder"] != null)
+      {        
+        ViewBag.Title = "Din orderbekräftelse";
+        ViewBag.OrderMessage = "Böcker i din beställning";
+        ViewBag.Orderlist = order.OrderList;
+        ViewBag.BackorderMessage = "Följande produkt(er) är slut i lagret.";
+        ViewBag.Backorderlist = order.BackorderList;        
+        ViewBag.Title = "Tack för din beställning!";
+        ViewBag.TotalSum = order.GetTotalSumOfOrder(order.OrderList);
+      }
+      return View();
+    }
+
+    public ActionResult MakeAnOrder()
+    {
+      ShoppingCart cart = new ShoppingCart();
+      Order order = new Order();
+
+      if (System.Web.HttpContext.Current.Session["booksAddedToCart"] == null)
+      {
+        ViewBag.Title = "Du har ingen beställning än.";
+
+      }
+      // Get cart items from session json-data
+      cart.Shopcart = cart.GetCartItemsFromJsonString(System.Web.HttpContext.Current.Session["booksAddedToCart"].ToString());
+
+      // Check if item is in stock, then add to orderlist and store in json
+      order.AddItemsToOrderList(cart.Shopcart);
+      string session = JsonConvert.SerializeObject(cart.Shopcart);
+      System.Web.HttpContext.Current.Session["booksInOrder"] = session;      
+
+      // Send data to View
+      ViewBag.OrderMessage = "Böcker i din beställning";
+      ViewBag.Orderlist = order.OrderList;
+      ViewBag.BackorderMessage = "Följande produkt(er) är slut i lagret.";
+      ViewBag.Backorderlist = order.BackorderList;      
+      ViewBag.Title = "Tack för din beställning!";
+      ViewBag.TotalSum = order.GetTotalSumOfOrder(order.OrderList);
+      return View("Order");
+    }
   }
 }

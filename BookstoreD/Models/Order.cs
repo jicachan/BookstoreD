@@ -13,18 +13,17 @@ namespace BookstoreD
     decimal orderTotalSum; 
 
     // Properties
-    public List<Book> OrderList => orderList;
-    public List<Book> OutOfStockList => backorderList;
+    public List<Book> OrderList { get => orderList; set => orderList = value; }
+    public List<Book> BackorderList { get => backorderList; set => backorderList = value; }
     public decimal OrderTotalSum { get => orderTotalSum; set => orderTotalSum = value; }
 
-        
 
     // Method: Add items from cartList to orderList
     public void AddItemsToOrderList(List<Book> cart)
     {
       // Empty lists
-      orderList.Clear();
-      backorderList.Clear();
+      OrderList.Clear();
+      BackorderList.Clear();
 
       if (cart != null && cart.Any())
       {
@@ -32,11 +31,11 @@ namespace BookstoreD
         {
           if (book.InStock > 0)
           {
-            orderList.Add(book);
+            OrderList.Add(book);
           }
           else
           {
-            backorderList.Add(book);
+            BackorderList.Add(book);
           }
         }
       }
